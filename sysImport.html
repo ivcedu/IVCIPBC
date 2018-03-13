@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+        <meta http-equiv="Cache-Control" content="no-cache"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title>Import Data</title>
+        <!-- CDN css link -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+        <!-- inspinia-2.7.1 css -->
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/font-awesome/css/font-awesome.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/plugins/jasny/jasny-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/plugins/sweetalert/sweetalert.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/animate.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/style.css"/>
+        <!-- include css -->
+        <link rel="stylesheet" href="../include/iconic-1.9.0/font/css/iconic-bootstrap.css"/>
+        <!-- application css -->
+        <link rel="stylesheet" href="css/spinner_loader.css"/>
+        <link rel="stylesheet" href="css/ivcipbc.css?v=1.0.0"/>
+    </head>
+    <body class="top-navigation">
+        <div id="wrapper">
+            <div id="page-wrapper" class="gray-bg">
+                <!-- navigation bar -->
+                <div class="row border-bottom white-bg">
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <div class="navbar-header">
+                            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                                <i class="fa fa-reorder"></i>
+                            </button>
+                            <a href="#" class="navbar-brand" id="login_user"></a>
+                        </div>
+                        <div class="navbar-collapse collapse" id="navbar">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="home.html">
+                                        <i class="fa fa-home"></i> Home
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> System <span class="caret"></span></a>
+                                    <ul role="menu" class="dropdown-menu">
+                                        <li><a href="sysUser.html">User</a></li>
+                                        <li><a href="sysStipendOption.html">Stipend Option</a></li>
+                                        <li><a href="sysImport.html">Import</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-top-links navbar-right">
+                                <li>
+                                    <a href="#" id="nav_logout">
+                                        <i class="fa fa-sign-out"></i> Log out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <!-- main content -->
+                <div class="wrapper wrapper-content">
+                    <div class="container">
+                        <!-- spinner -->
+                        <div hidden class="row" id="spinner_loader">
+                            <img src="images/spinner.svg" id="spinner_loader_img">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Import Data from CVS File</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <p>Import data from Canvas will add/update all courses into IVC published courses by term code</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label">TermCode</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text" class="form-control" id="term_code">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                        <div class="form-control" data-trigger="fileinput">
+                                                            <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                        <span class="fileinput-filename"></span>
+                                                        </div>
+                                                        <span class="input-group-addon btn btn-default btn-file">
+                                                            <span class="fileinput-new">Select file</span>
+                                                            <span class="fileinput-exists">Change</span>
+                                                            <input type="file" accept=".csv" id="csv_import_file">
+                                                        </span>
+                                                        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <button type="button" class="btn btn-w-m btn-primary" id="btn_import">Import</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- inspinia-2.7.1 main javascript -->
+        <script src="../inspinia-v2.7.1/js/jquery-3.1.1.min.js"></script>
+        <script src="../inspinia-v2.7.1/js/bootstrap.min.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/sweetalert/sweetalert.min.js"></script>
+        <!-- inspinia-2.7.1 custom and plugin javascript -->
+        <script src="../inspinia-v2.7.1/js/inspinia.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/pace/pace.min.js"></script>        
+        <!-- include javascript -->
+        <!-- application javascript -->
+        <script src="js/sysImport.js?v=1.0.0"></script>
+        <script src="js/session_data.js?v=1.0.0"></script>
+        <script src="js/db_access.js?v=1.0.0"></script>
+    </body>
+</html>
