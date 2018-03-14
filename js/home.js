@@ -23,7 +23,7 @@ $(document).ready(function() {
     // jquery datatables initialize ////////////////////////////////////////////
     m_table = $('#tbl_courses_list').DataTable({ paging: false, bInfo: false, responsive: true, 
                                                  dom: '<"html5buttons"B>lTfgitp',
-                                                 buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'ExampleFile'}, {extend: 'pdf', title: 'ExampleFile'},
+                                                 buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'Courses_History'}, {extend: 'pdf', title: 'Courses_History'},
                                                             {extend: 'print', customize: function (win){
                                                                     $(win.document.body).addClass('white-bg');
                                                                     $(win.document.body).css('font-size', '10px');

@@ -23,16 +23,16 @@ $(document).ready(function() {
     });
     
     // jquery datatables initialize ////////////////////////////////////////////
-    m_table = $('#tbl_user_list').DataTable({ paging: false, bInfo: false, responsive: true, columnDefs:[{ className: "dt-center", orderable: false, targets: 4 }], 
+    m_table = $('#tbl_user_list').DataTable({ paging: false, bInfo: false, responsive: true, columnDefs:[{ className: "dt-center", orderable: false, targets: 4 }],
                                               dom: '<"html5buttons"B>lTfgitp',
-                                              buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'ExampleFile'}, {extend: 'pdf', title: 'ExampleFile'},
+                                              buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'Access_User_List'}, {extend: 'pdf', title: 'Access_User_List'},
                                                         {extend: 'print', customize: function (win){
                                                                 $(win.document.body).addClass('white-bg');
                                                                 $(win.document.body).css('font-size', '10px');
                                                                 $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');}
                                                         }]
                                             });
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $('#nav_logout').click(function() {
@@ -127,7 +127,6 @@ function getUserAccessListActive() {
     for (var i = 0; i < result.length; i++) {
         html += "<option value='" + result[i]['UserAccessID']  + "'>" + result[i]['UserAccess'] + "</option>";
     }
-    
     $('#mod_access_level').append(html);
 }
 
@@ -169,6 +168,8 @@ function getUserList() {
     var result = new Array(); 
     result = db_getUserListDataTable();
     
-    m_table.clear();
-    m_table.rows.add(result).draw();
+    setTimeout(function() { 
+        m_table.clear();
+        m_table.rows.add(result).draw();
+    }, 10);
 }

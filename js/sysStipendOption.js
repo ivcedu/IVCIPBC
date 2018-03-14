@@ -24,7 +24,7 @@ $(document).ready(function() {
     // jquery datatables initialize ////////////////////////////////////////////
     m_table = $('#tbl_stipend_option_list').DataTable({ paging: false, bInfo: false, responsive: true, columnDefs:[{ className: "dt-center", orderable: false, targets: 2 }], 
                                                         dom: '<"html5buttons"B>lTfgitp',
-                                                        buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'ExampleFile'}, {extend: 'pdf', title: 'ExampleFile'},
+                                                        buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'Stipend_Option_List'}, {extend: 'pdf', title: 'Stipend_Option_List'},
                                                                   {extend: 'print', customize: function (win){
                                                                           $(win.document.body).addClass('white-bg');
                                                                           $(win.document.body).css('font-size', '10px');
@@ -134,6 +134,8 @@ function getStipendOptionList() {
     var result = new Array(); 
     result = db_getStipendOptionListDataTable();
     
-    m_table.clear();
-    m_table.rows.add(result).draw();
+    setTimeout(function() { 
+        m_table.clear();
+        m_table.rows.add(result).draw();
+    }, 10);
 }
