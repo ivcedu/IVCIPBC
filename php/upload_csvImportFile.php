@@ -21,7 +21,7 @@
             fclose($handle);
         }
         
-        $result = unlink($output_dir.$file_name);
+//        $result = unlink($output_dir.$file_name);
         echo $result;
         
     }
