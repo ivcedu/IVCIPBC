@@ -3,10 +3,11 @@ var inst_user_name = "";
 ////////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
     if (sessionStorage.key(0) !== null) {
-        if (isUserHasAdminAccess()) {
+        if (userAccessLevel() === "1") {
             $('#system_option').show();
         }
         getLoginInfo();
+        setStipendTracking();
         getStipendOptionList();
     }
     else {
@@ -19,6 +20,9 @@ window.onload = function() {
 $(document).ready(function() {
     // auto size initialize ////////////////////////////////////////////////////
     autosize($('.autogrow'));
+    
+    // datepicker initialize ///////////////////////////////////////////////////
+    $('.input-group.date').datepicker({ todayBtn: "linked", keyboardNavigation: false, forceParse: false, autoclose: true });
     
     // jquery datatables initialize ////////////////////////////////////////////
     m_table = $('#tbl_courses_list').DataTable({ paging: false, bInfo: false, responsive: true, 
@@ -48,17 +52,22 @@ $(document).ready(function() {
         }
         
         startSpinning();
-        setTimeout(function() { 
+        setTimeout(function() {
+            clearStipendSection();
+            clearStipendTracking();
+            
             inst_user_name = $.trim($('#inst_user_name').val());
             var result = new Array();
             result = tardis_getInstructorByUserID(inst_user_name);
 
             if (result.length !== 1) {
+                $('#btn_stipend_save').prop('disabled', true);
                 swal({title: "Error", text: "Instructor cannot find", type: "error"});
-                clearStipendSection();
+                setDefaultStipendSection();
                 m_table.clear().draw();
             }
             else {
+                $('#btn_stipend_save').prop('disabled', false);
                 getInstStipend();
                 getInstCoursesHistoryList(inst_user_name);
                 $('#instructor_name').html(result[0]['FirstName'] + " " + result[0]['LastName']);
@@ -94,10 +103,9 @@ $(document).ready(function() {
         var result = new Array();
         result = db_getStipendByInstructor(inst_user_name);
         
-        var login_id = sessionStorage.getItem('ss_ipbc_login_id');
         var stipend_id = "";
         if (result.length === 0) {
-            stipend_id = db_insertStipend(stipend_option_id, login_id, inst_user_name, comments);
+            stipend_id = db_insertStipend(stipend_option_id, sessionStorage.getItem('ss_ipbc_login_id'), inst_user_name, comments);
             if (stipend_id === "") {
                 var str_msg = "DB system error INSERT STIPEND";
                 return dbSystemErrorHandling(str_msg);
@@ -105,18 +113,129 @@ $(document).ready(function() {
         }
         else {
             stipend_id = result[0]['StipendID'];            
-            if (!db_updateStipendByID(stipend_id, stipend_option_id, login_id, inst_user_name, comments)) {
+            if (!db_updateStipendByID(stipend_id, stipend_option_id, sessionStorage.getItem('ss_ipbc_login_id'), inst_user_name, comments)) {
                 var str_msg = "DB system error UPDATE STIPEND - StipendID: " + stipend_id;
                 return dbSystemErrorHandling(str_msg);
             }
         }
 
-        if (db_insertStipendLog(stipend_id, login_id, "Stipend Option has been updated: <b>" + stipend_option_name + "</b>" + comments) === "") {
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Stipend Option has been updated: <b>" + stipend_option_name + "</b>" + comments) === "") {
             var str_msg = "DB system error INSERT STIPEND_LOG";
             return dbSystemErrorHandling(str_msg);
         }
         else {
             swal({title: "Saved!", text: "Paying a stipend has been save successfuly", type: "success"});
+            getInstStipendLog(stipend_id);
+        }
+        
+        return false;
+    });
+    
+    // date to hr save button click ////////////////////////////////////////////
+    $('#btn_date_to_hr_save').click(function() {
+        var stipend_id = stipendTrackingValidation();
+        if (stipend_id === 0) {
+            $('#date_to_hr').datepicker('update', null);
+            return false;
+        }
+        var date_to_hr = $('#date_to_hr').find('input').val();
+        if (date_to_hr === "") {
+            swal({title: "Error", text: "Please select Date to HR", type: "error"});
+            return false;
+        }
+        
+        var stipend_tracking_id = getStipendTracking(stipend_id);
+        if (stipend_tracking_id === "") {
+            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            if (!db_updateSTDateToHRByID(stipend_tracking_id, date_to_hr)) {
+                var str_msg = "DB system error UPDATE STIPEND_TRACKING - StipendTrackingID: " + stipend_tracking_id + ", DateToHR:" + date_to_hr;
+                return dbSystemErrorHandling(str_msg);
+            }
+        }
+        
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Date to HR: " + date_to_hr) === "") {
+            var str_msg = "DB system error INSERT STIPEND_LOG";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            swal({title: "Saved!", text: "Date to HR has been save successfuly", type: "success"});
+            getInstStipendLog(stipend_id);
+        }
+
+        return false;
+    });
+    
+    // date board approve save button click ////////////////////////////////////
+    $('#btn_date_board_approve_save').click(function() {
+        var stipend_id = stipendTrackingValidation();
+        if (stipend_id === 0) {
+            $('#date_ba').datepicker('update', null);
+            return false;
+        }
+        var date_ba = $('#date_ba').find('input').val();
+        if (date_ba === "") {
+            swal({title: "Error", text: "Please select Date Board Approve", type: "error"});
+            return false;
+        }
+        
+        var stipend_tracking_id = getStipendTracking(stipend_id);
+        if (stipend_tracking_id === "") {
+            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            if (!db_updateSTDateBAByID(stipend_tracking_id, date_ba)) {
+                var str_msg = "DB system error UPDATE STIPEND_TRACKING - StipendTrackingID: " + stipend_tracking_id + ", DateBA:" + date_ba;
+                return dbSystemErrorHandling(str_msg);
+            }
+        }
+        
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Date Board Approve: " + date_ba) === "") {
+            var str_msg = "DB system error INSERT STIPEND_LOG";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            swal({title: "Saved!", text: "Date Board Approve has been save successfuly", type: "success"});
+            getInstStipendLog(stipend_id);
+        }
+        
+        return false;
+    });
+    
+    // date to payroll save button click ///////////////////////////////////////
+    $('#btn_date_to_payroll_save').click(function() {
+        var stipend_id = stipendTrackingValidation();
+        if (stipend_id === 0) {
+            $('#date_to_payroll').datepicker('update', null);
+            return false;
+        }
+        var date_to_payroll = $('#date_to_payroll').find('input').val();
+        if (date_to_payroll === "") {
+            swal({title: "Error", text: "Please select Date to Payroll", type: "error"});
+            return false;
+        }
+
+        var stipend_tracking_id = getStipendTracking(stipend_id);
+        if (stipend_tracking_id === "") {
+            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            if (!db_updateSTDateToPayrollByID(stipend_tracking_id, date_to_payroll)) {
+                var str_msg = "DB system error UPDATE STIPEND_TRACKING - StipendTrackingID: " + stipend_tracking_id + ", DateToPayroll:" + date_to_payroll;
+                return dbSystemErrorHandling(str_msg);
+            }
+        }
+        
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Date to Payroll: " + date_to_payroll) === "") {
+            var str_msg = "DB system error INSERT STIPEND_LOG";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            swal({title: "Saved!", text: "Date to Payroll has been save successfuly", type: "success"});
             getInstStipendLog(stipend_id);
         }
         
@@ -144,6 +263,12 @@ function getLoginInfo() {
     $('#login_user').html(login_name);
 }
 
+function setStipendTracking() {
+    if (userAccessLevel() === "1" || userAccessLevel() === "3") {
+        $('#tab_section_stipend_tracking').css('display', 'block');
+    }
+}
+
 function getStipendOptionList() {
     var result = new Array();
     result = db_getStipendOptionListActive();
@@ -162,6 +287,21 @@ function clearStipendSection() {
     $('#stipend_option_list').val("0");
     $('#comments').val("");
     $('#stipend_history_log').html("");
+}
+
+function clearStipendTracking() {
+    $('#date_to_hr').datepicker('update', null);
+    $('#date_ba').datepicker('update', null);
+    $('#date_to_payroll').datepicker('update', null);
+}
+
+function setDefaultStipendSection() {
+    $('#tab_section_paying_stipend').addClass('active');
+    $('#tab_section_stipend_history').removeClass('active');
+    $('#tab_section_stipend_tracking').removeClass('active');
+    $('#tab_paying_stipend').addClass('active');
+    $('#tab_stipend_history').removeClass('active');
+    $('#tab_stipend_tracking').removeClass('active');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,6 +325,23 @@ function stipendValidation() {
     return true;
 }
 
+function stipendTrackingValidation() {
+    if (inst_user_name === "") {
+        swal({title: "Error", text: "Please search Instructor first", type: "error"});
+        return 0;
+    }
+    
+    var result = new Array();
+    result = db_getStipendByInstructor(inst_user_name);
+    if (result.length !== 1) {
+        swal({title: "Error", text: "Paying a Stipend has not been saved", type: "error"});
+        return 0;
+    }
+    else {
+        return Number(result[0]['StipendID']);
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function getInstStipend() {
     var result = new Array();
@@ -195,19 +352,19 @@ function getInstStipend() {
 //        $('#comments').val(result[0]['Comments']);
         var stipend_id = result[0]['StipendID'];
         getInstStipendLog(stipend_id);
+        getStipendTrackingDates(stipend_id);
+        
         $('#tab_section_paying_stipend').removeClass('active');
         $('#tab_section_stipend_history').addClass('active');
+        $('#tab_section_stipend_tracking').removeClass('active');
         $('#tab_paying_stipend').removeClass('active');
         $('#tab_stipend_history').addClass('active');
+        $('#tab_stipend_tracking').removeClass('active');
 
 //        $('#stipend_section').addClass('animated shake');
     }
     else {
-        clearStipendSection();
-        $('#tab_section_paying_stipend').addClass('active');
-        $('#tab_section_stipend_history').removeClass('active');
-        $('#tab_paying_stipend').addClass('active');
-        $('#tab_stipend_history').removeClass('active');
+        setDefaultStipendSection();
     }
 }
 
@@ -233,3 +390,44 @@ function getInstCoursesHistoryList(instructor) {
     m_table.clear();
     m_table.rows.add(result).draw();
 }
+
+function getStipendTracking(stipend_id) {
+    var result = new Array();
+    result = db_getStipendTrackingByStipendID(stipend_id);
+    
+    if (result.length === 0) {
+        return db_insertStipendTracking(stipend_id);
+    }
+    else {
+        return result[0]['StipendTrackingID'];
+    }
+}
+
+function getStipendTrackingDates(stipend_id) {
+    var result = new Array();
+    result = db_getStipendTrackingByStipendID(stipend_id);
+    
+    if (result.length === 1) {
+        $('#btn_stipend_save').prop('disabled', true);
+        if (result[0]['DateToHR'] !== null) {
+            var arr_date_hr = result[0]['DateToHR'].split('-');
+            var date_to_hr = new Date(arr_date_hr[0], arr_date_hr[1]-1, arr_date_hr[2]);
+            $('#date_to_hr').datepicker('update', date_to_hr);
+        }
+        if (result[0]['DateBA'] !== null) {
+            var arr_date_ba = result[0]['DateBA'].split('-');
+            var date_ba = new Date(arr_date_ba[0], arr_date_ba[1]-1, arr_date_ba[2]);
+            $('#date_ba').datepicker('update', date_ba);
+        }
+        if (result[0]['DateToPayroll'] !== null) {
+            var arr_date_payroll = result[0]['DateToPayroll'].split('-');
+            var date_to_payroll = new Date(arr_date_payroll[0], arr_date_payroll[1]-1, arr_date_payroll[2]);
+            $('#date_to_payroll').datepicker('update', date_to_payroll);
+        }
+    }
+    else {
+        $('#btn_stipend_save').prop('disabled', false);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

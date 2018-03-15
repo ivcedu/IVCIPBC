@@ -1,9 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
-function sessionData_login(loginName, loginEmail, department, phone) {  
+function sessionData_login(loginName, loginEmail, department) {  
     sessionStorage.setItem('ss_ipbc_loginName', loginName);
     sessionStorage.setItem('ss_ipbc_loginEmail', loginEmail);
     sessionStorage.setItem('ss_ipbc_department', department);
-    sessionStorage.setItem('ss_ipbc_phone', phone);
 }
 
 //function sessionData_MrktRequestID(mrkt_request_id) {
@@ -24,19 +23,14 @@ function isUserHasAccess() {
     }
 }
 
-function isUserHasAdminAccess() {        
+function userAccessLevel() {        
     var result = new Array();
     result = db_getUserByEmail(sessionStorage.getItem('ss_ipbc_loginEmail'));
     if (result.length === 1) {
-        if (result[0]['UserAccessID'] === "1") {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return result[0]['UserAccessID'];
     }
     else {
-        return false;
+        return "0";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////

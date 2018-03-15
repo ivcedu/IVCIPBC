@@ -2,7 +2,7 @@ var m_table;
 var stipend_option_id = "";
 ////////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
-    if (sessionStorage.key(0) !== null && isUserHasAdminAccess()) {
+    if (sessionStorage.key(0) !== null && userAccessLevel() === "1") {
         getLoginInfo();
         getStipendOptionList();
     }

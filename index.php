@@ -33,13 +33,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center m-b-md">
-                        <h3 style="color: white;"><i class="pe-7s-study pe-2x pe-va" style="color: #fcae11;"></i> IVC Instructor Published Courses</h3>
+                        <h3 style="color: white;"><i class="pe-7s-study pe-2x pe-va" style="color: #fcae11;"></i> IVC Published Courses</h3>
                     </div>
                     <div class="hpanel">
                         <div class="panel-body">
                             <form action="#" id="loginForm">
                                 <div class="form-group">
-                                    <label class="control-label">Username or Email</label>
+                                    <label class="control-label">College Email</label>
                                     <input type="text" class="form-control" id="username">
                                 </div>
                                 <div class="form-group">

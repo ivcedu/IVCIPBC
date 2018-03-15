@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="../inspinia-v2.7.1/font-awesome/css/font-awesome.css"/>
         <link rel="stylesheet" href="../inspinia-v2.7.1/css/plugins/dataTables/datatables.min.css"/>
         <link rel="stylesheet" href="../inspinia-v2.7.1/css/plugins/sweetalert/sweetalert.css"/>
+        <link rel="stylesheet" href="../inspinia-v2.7.1/css/plugins/datapicker/datepicker3.css"/>
         <link rel="stylesheet" href="../inspinia-v2.7.1/css/animate.css"/>
         <link rel="stylesheet" href="../inspinia-v2.7.1/css/style.css"/>
         <!-- include css -->
@@ -33,6 +34,13 @@
                             <a href="#" class="navbar-brand" id="login_user"></a>
                         </div>
                         <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="rptStipendTracking.html">
+                                        <i class="fa fa-bar-chart-o"></i> Reports
+                                    </a>
+                                </li>
+                            </ul>
                             <ul class="nav navbar-nav" hidden id="system_option">
                                 <li class="dropdown">
                                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> System <span class="caret"></span></a>
@@ -99,6 +107,7 @@
                                             <ul class="nav nav-tabs">
                                                 <li class="active" id="tab_section_paying_stipend"><a data-toggle="tab" href="#tab_paying_stipend">Paying a Stipend</a></li>
                                                 <li class="" id="tab_section_stipend_history"><a data-toggle="tab" href="#tab_stipend_history">Stipend History</a></li>
+                                                <li class="" style="display:none;" id="tab_section_stipend_tracking"><a data-toggle="tab" href="#tab_stipend_tracking">Stipend Tracking</a></li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div id="tab_paying_stipend" class="tab-pane active">
@@ -116,7 +125,7 @@
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">Stipend Option</label>
                                                                 <div class="col-lg-4"><select class="form-control m-b" id="stipend_option_list"></select></div>
-                                                                <div class="col-lg-4"><button type="button" class="btn btn-w-m btn-success" id="btn_stipend_save">Save</button></div>
+                                                                <div class="col-lg-4"><button type="button" class="btn btn-w-m btn-success" disabled id="btn_stipend_save">Save</button></div>
                                                             </div> 
                                                             <div class="form-group">
                                                                 <label class="col-lg-4 control-label">Comments</label>
@@ -130,6 +139,39 @@
                                                 <div id="tab_stipend_history" class="tab-pane">
                                                     <div class="panel-body">
                                                         <div class="col-lg-12" id="stipend_history_log"></div>
+                                                    </div>
+                                                </div>
+                                                <div id="tab_stipend_tracking" class="tab-pane">
+                                                    <div class="panel-body">
+                                                        <form class="form-horizontal">
+                                                            <div class="form-group">
+                                                                <label class="col-lg-4 control-label">Date to HR</label>
+                                                                <div class="col-lg-4">
+                                                                    <div class="input-group date" id="date_to_hr">
+                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4"><button type="button" class="btn btn-w-m btn-success" id="btn_date_to_hr_save">Save</button></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-lg-4 control-label">Date Board Approve</label>
+                                                                <div class="col-lg-4">
+                                                                    <div class="input-group date" id="date_ba">
+                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4"><button type="button" class="btn btn-w-m btn-success" id="btn_date_board_approve_save">Save</button></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-lg-4 control-label">Date to Payroll</label>
+                                                                <div class="col-lg-4">
+                                                                    <div class="input-group date" id="date_to_payroll">
+                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4"><button type="button" class="btn btn-w-m btn-success" id="btn_date_to_payroll_save">Save</button></div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,6 +228,7 @@
         <script src="../inspinia-v2.7.1/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
         <script src="../inspinia-v2.7.1/js/plugins/dataTables/datatables.min.js"></script>
         <script src="../inspinia-v2.7.1/js/plugins/sweetalert/sweetalert.min.js"></script>
+        <script src="../inspinia-v2.7.1/js/plugins/datapicker/bootstrap-datepicker.js"></script>
         <!-- inspinia-2.7.1 custom and plugin javascript -->
         <script src="../inspinia-v2.7.1/js/inspinia.js"></script>
         <script src="../inspinia-v2.7.1/js/plugins/pace/pace.min.js"></script>

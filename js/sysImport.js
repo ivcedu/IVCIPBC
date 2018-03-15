@@ -2,7 +2,7 @@ var m_table;
 var user_id = "";
 ////////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
-    if (sessionStorage.key(0) !== null && isUserHasAdminAccess()) {
+    if (sessionStorage.key(0) !== null && userAccessLevel() === "1") {
         getLoginInfo();
     }
     else {
@@ -37,10 +37,15 @@ $(document).ready(function() {
             var str_msg = "DB system error DELETE CANVAS DATA BY TERM_CODE";
             return dbSystemErrorHandling(str_msg);
         }
-        if (insertCSVImportFileAttachment()) {
-            swal({title: "Success!", text: "Import to Canvas table has been completed", type: "success"});
-        }
-
+        
+        startSpinning();
+        setTimeout(function() {
+            if (insertCSVImportFileAttachment()) {
+                swal({title: "Success!", text: "Import to Canvas table has been completed", type: "success"});
+            }
+            stopSpinning();
+        }, 1500);
+        
         return false;
     });
 });

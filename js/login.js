@@ -33,20 +33,20 @@ window.onload = function() {
 $(document).ready(function() {      
     $('#btn_login').click(function() { 
         // ireport.ivc.edu validation //////////////////////////////////////////
-        if(location.href.indexOf("ireport.ivc.edu") >= 0 && !ireportValidation()) {
-            swal({  title: "Access Denied",
-                    text: "This is a Development site. It will redirect to IVC Application site",
-                    type: "error",
-                    confirmButtonText: "OK" },
-                    function() {
-                        sessionStorage.clear();
-                        window.open('https://services.ivc.edu/', '_self');
-                        return false;
-                    }
-            );
-        }
+//        if(location.href.indexOf("ireport.ivc.edu") >= 0 && !ireportValidation()) {
+//            swal({  title: "Access Denied",
+//                    text: "This is a Development site. It will redirect to IVC Application site",
+//                    type: "error",
+//                    confirmButtonText: "OK" },
+//                    function() {
+//                        sessionStorage.clear();
+//                        window.open('https://services.ivc.edu/', '_self');
+//                        return false;
+//                    }
+//            );
+//        }
         ////////////////////////////////////////////////////////////////////////
-        else {
+//        else {
             var login_error = loginInfo();
             if(login_error === "") {
                 if (!isUserHasAccess()) {
@@ -54,7 +54,13 @@ $(document).ready(function() {
                     $('#logn_error').hide();
                     return false;
                 }
-                window.open('home.html', '_self');
+                
+                if (userAccessLevel() === "4") {
+                    window.open('rptStipendTracking.html', '_self');
+                }
+                else {
+                    window.open('home.html', '_self');
+                }
                 return false;
             }
             else {
@@ -63,7 +69,7 @@ $(document).ready(function() {
                 this.blur();
                 return false;
             }
-        }
+//        }
     });
     
     $.backstretch(["images/ivcipbc_back_web_1.jpg"], { duration: 3000, fade: 750 });
@@ -71,23 +77,36 @@ $(document).ready(function() {
 
 ////////////////////////////////////////////////////////////////////////////////
 function loginInfo() {   
-    var username = $('#username').val().toLowerCase().replace("@ivc.edu", "").replace("@saddleback.edu", "");
+    var username = $('#username').val().toLowerCase();
     var password = $('#password').val();
     
     var result = new Array();
-    result = getLoginUserInfo("php/ldap_ivc_login.php", username, password);    
-    if (result.length === 0) {
-        return "Invalid Username/Email or Password";
+    if (username.indexOf("@ivc.edu") >= 1) {
+        username = $.trim(username.replace("@ivc.edu", ""));
+        result = getLoginUserInfo("php/ldap_ivc_login.php", username, password);
+        
+        if (result.length === 0) {
+            return "Invalid College Email or Password";
+        }
+    }
+    else if (username.indexOf("@saddleback.edu") >= 1) {
+        username = $.trim(username.replace("@saddleback.edu", ""));
+        result = getLoginUserInfo("php/ldap_sc_login.php", username, password);
+        
+        if (result.length === 0) {
+            return "Invalid College Email or Password";
+        }
     }
     else {
-        var name = objToString(result[0]);
-        var email = objToString(result[1]);
-        var department = objToString(result[2]);
-        var phone = objToString(result[3]);
-        
-        sessionData_login(name, email, department, phone);
-        return "";
+        return "Invalid College Email or Password";
     }
+    
+    var name = objToString(result[0]);
+    var email = objToString(result[1]);
+    var department = objToString(result[2]);
+
+    sessionData_login(name, email, department);
+    return "";
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -172,6 +172,33 @@ function db_getStipendLogByStipendID(StipendID) {
     return result;
 }
 
+function db_getStipendTrackingByStipendID(StipendID) {
+    var result = new Array();
+    $.ajax({
+        type:"POST",
+        url:"php/db_getStipendTrackingByStipendID.php",
+        data:{StipendID:StipendID},
+        async: false,  
+        success:function(data) {
+            result = JSON.parse(data);
+        }
+    });
+    return result;
+}
+
+function db_getStipendTrackingList() {
+    var result = new Array();
+    $.ajax({
+        type:"POST",
+        url:"php/db_getStipendTrackingList.php",
+        async: false,  
+        success:function(data) {
+            result = JSON.parse(data);
+        }
+    });
+    return result;
+}
+
 // insert DB ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function db_insertSystemLog(UserName, Note) {
     var ResultID = "";
@@ -243,6 +270,20 @@ function db_insertStipendLog(StipendID, UserID, Comments) {
     return ResultID;
 }
 
+function db_insertStipendTracking(StipendID) {
+    var ResultID = "";
+    $.ajax({
+        type:"POST",
+        url:"php/db_insertStipendTracking.php",
+        data:{StipendID:StipendID},
+        async: false,  
+        success:function(data) {
+            ResultID = JSON.parse(data);
+        }
+    });
+    return ResultID;
+}
+
 // update DB ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function db_updateUserByID(UserID, Active, UserAccessID, UserName, UserEmail) {
     var Result = false;
@@ -278,6 +319,48 @@ function db_updateStipendByID(StipendID, StipendOptionID, UserID, Instructor, Co
         type:"POST",
         url:"php/db_updateStipendByID.php",
         data:{StipendID:StipendID, StipendOptionID:StipendOptionID, UserID:UserID, Instructor:Instructor, Comments:Comments},
+        async: false,  
+        success:function(data) {
+            Result = JSON.parse(data);
+        }
+    });
+    return Result;
+}
+
+function db_updateSTDateToHRByID(StipendTrackingID, DateToHR) {
+    var Result = false;
+    $.ajax({
+        type:"POST",
+        url:"php/db_updateSTDateToHRByID.php",
+        data:{StipendTrackingID:StipendTrackingID, DateToHR:DateToHR},
+        async: false,  
+        success:function(data) {
+            Result = JSON.parse(data);
+        }
+    });
+    return Result;
+}
+
+function db_updateSTDateBAByID(StipendTrackingID, DateBA) {
+    var Result = false;
+    $.ajax({
+        type:"POST",
+        url:"php/db_updateSTDateBAByID.php",
+        data:{StipendTrackingID:StipendTrackingID, DateBA:DateBA},
+        async: false,  
+        success:function(data) {
+            Result = JSON.parse(data);
+        }
+    });
+    return Result;
+}
+
+function db_updateSTDateToPayrollByID(StipendTrackingID, DateToPayroll) {
+    var Result = false;
+    $.ajax({
+        type:"POST",
+        url:"php/db_updateSTDateToPayrollByID.php",
+        data:{StipendTrackingID:StipendTrackingID, DateToPayroll:DateToPayroll},
         async: false,  
         success:function(data) {
             Result = JSON.parse(data);

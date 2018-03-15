@@ -10,8 +10,8 @@
         
         if (($handle = fopen($output_dir.$file_name, "r")) !== FALSE) {            
             while (($data = fgetcsv($handle, ",")) !== FALSE) {
-                $query = "INSERT INTO [".$dbDatabase."].[dbo].[Canvas] (TermCode, SectionNum, Status, Instructor, CoursesType) "
-                            ."VALUES ('$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]')"; 
+                $query = "INSERT INTO [".$dbDatabase."].[dbo].[Canvas] (TermCode, SectionNum, Status, Instructor) "
+                            ."VALUES ('$data[0]', '$data[1]', '$data[2]', '$data[3]')"; 
                 
                 $cmd = $dbConn->prepare($query);
                 $cmd->execute();

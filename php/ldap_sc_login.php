@@ -1,10 +1,10 @@
 <?php
-    $server = "ivc.edu";
-    $baseDN = "dc=ivc,dc=edu";
+    $server = "saddleback.edu";
+    $baseDN = "dc=saddleback,dc=edu";
          
     $username = filter_input(INPUT_POST, 'username');
     $password = filter_input(INPUT_POST, 'password');
-    $login = "IVCSTAFF\\".$username;
+    $login = "SADDLEBACK\\".$username;
     $result = array();
 
     $ldapconn = ldap_connect($server);   
@@ -20,7 +20,7 @@
 
             if ($data != null) {
                 if (array_key_exists('displayname', $data[0])) {
-                    $name = $data[0]["displayname"][0];
+                    $display_name = $data[0]["displayname"][0];
                 }
                 if (array_key_exists('mail', $data[0])) {
                     $email = $data[0]["mail"][0];
@@ -29,9 +29,10 @@
                     $department = $data[0]["department"][0];
                 }
 
-                $result = array($name, $email, $department, $phone);
-            }
-        }          
+                $result = array($display_name, $email, $phone, $employeenumber, $department, "Staff");
+            } 
+        }
+        
         ldap_close($ldapconn);
     }
     echo json_encode($result);
