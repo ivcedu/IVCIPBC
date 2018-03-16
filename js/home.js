@@ -2,7 +2,7 @@ var m_table;
 var inst_user_name = "";
 ////////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
-    if (sessionStorage.key(0) !== null) {
+    if (sessionStorage.key(0) !== null && userAccessLevel() !== "4") {
         if (userAccessLevel() === "1") {
             $('#system_option').show();
         }
@@ -11,6 +11,8 @@ window.onload = function() {
         getStipendOptionList();
     }
     else {
+        sessionStorage.clear();
+        inst_user_name = "";
         window.open('login.html', '_self');
     }
 };
@@ -408,7 +410,10 @@ function getStipendTrackingDates(stipend_id) {
     result = db_getStipendTrackingByStipendID(stipend_id);
     
     if (result.length === 1) {
-        $('#btn_stipend_save').prop('disabled', true);
+        if (userAccessLevel() === "2") {
+            $('#btn_stipend_save').prop('disabled', true);
+        }
+        
         if (result[0]['DateToHR'] !== null) {
             var arr_date_hr = result[0]['DateToHR'].split('-');
             var date_to_hr = new Date(arr_date_hr[0], arr_date_hr[1]-1, arr_date_hr[2]);
@@ -424,9 +429,6 @@ function getStipendTrackingDates(stipend_id) {
             var date_to_payroll = new Date(arr_date_payroll[0], arr_date_payroll[1]-1, arr_date_payroll[2]);
             $('#date_to_payroll').datepicker('update', date_to_payroll);
         }
-    }
-    else {
-        $('#btn_stipend_save').prop('disabled', false);
     }
 }
 

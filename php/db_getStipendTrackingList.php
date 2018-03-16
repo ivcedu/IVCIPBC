@@ -2,6 +2,7 @@
     require("config.php");
 
     $query = "SELECT tdci.FirstName + ' ' + tdci.LastName, "
+            . "stpd.Instructor, "
             . "stio.StipendOption, "
             . "CONVERT(VARCHAR(10), sptk.DateToHR, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateBA, 101), "
