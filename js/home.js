@@ -26,6 +26,9 @@ $(document).ready(function() {
     // datepicker initialize ///////////////////////////////////////////////////
     $('.input-group.date').datepicker({ todayBtn: "linked", keyboardNavigation: false, forceParse: false, autoclose: true });
     
+    // bootstrap-typehead initialize ///////////////////////////////////////////
+    $('.typeahead').typeahead({ source: tardis_getInstructorList() });
+    
     // jquery datatables initialize ////////////////////////////////////////////
     m_table = $('#tbl_courses_list').DataTable({ paging: false, bInfo: false, responsive: true, 
                                                  dom: '<"html5buttons"B>lTfgitp',
