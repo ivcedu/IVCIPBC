@@ -29,7 +29,7 @@
                     $department = $data[0]["department"][0];
                 }
 
-                $result = array($display_name, $email, $phone, $employeenumber, $department, "Staff");
+                $result = array($display_name, $email, $department);
             } 
         }
         
