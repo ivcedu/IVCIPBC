@@ -113,7 +113,7 @@ function insertCSVImportFileAttachment() {
     var file = $('#csv_import_file').get(0).files[0];  
     var file_data = new FormData();
     var f_name = removeIllegalCharacters(file.name);
-    f_name = getDTUIStamp() + "_" + f_name + "_" + sessionStorage.getItem('ss_ipbc_loginName').replace(" ", "_");
+    f_name = getDTUIStamp() + "_" + f_name.replace(".csv", "") + "_" + sessionStorage.getItem('ss_ipbc_loginName').replace(" ", "_") + ".csv";
     file_data.append("files[]", file, f_name); 
 
     if (!upload_csvImportFile(file_data)) {
