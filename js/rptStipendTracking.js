@@ -17,7 +17,8 @@ window.onload = function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {    
     // jquery datatables initialize ////////////////////////////////////////////
-    m_table = $('#tbl_stipend_tracking').DataTable({ paging: false, bInfo: false, responsive: true, columnDefs:[{ className: "dt-center", orderable: false, targets: 0 }], order: [[ 1, "asc" ]],
+    m_table = $('#tbl_stipend_tracking').DataTable({ paging: false, bInfo: false, responsive: true,
+                                                    columnDefs:[{ className: "dt-center", orderable: false, targets: 0 }], order: [[ 1, "asc" ]],
                                                     dom: '<"html5buttons"B>lTfgitp',
                                                     buttons: [{ extend: 'copy'}, {extend: 'csv'}, {extend: 'excel', title: 'Stipend_Tracking_List'}, {extend: 'pdf', title: 'Stipend_Tracking_List'},
                                                               {extend: 'print', customize: function (win){
@@ -26,7 +27,7 @@ $(document).ready(function() {
                                                                       $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');}
                                                               }]
                                                   });
-
+                                                  
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $('#nav_logout').click(function() {
@@ -34,7 +35,12 @@ $(document).ready(function() {
         window.open('login.html', '_self');
         return false;
     });
-
+    
+    // table row click /////////////////////////////////////////////////////////
+    $('table').on( 'draw.dt', function () {
+        m_table.columns.adjust();
+    });
+    
     // table row click /////////////////////////////////////////////////////////
     $('table tbody').on('click', 'a[id^="stipend_id_"]', function(e) {
         e.preventDefault();
@@ -84,7 +90,6 @@ function getStipendTrackingList() {
     setTimeout(function() { 
         m_table.clear();
         m_table.rows.add(result).draw();
-        m_table.columns.adjust().draw();
     }, 10);
 }
 
