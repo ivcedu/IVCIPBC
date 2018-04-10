@@ -1,7 +1,8 @@
 <?php
     require("config.php");
 
-    $query = "SELECT tdci.FirstName + ' ' + tdci.LastName, "
+    $query = "SELECT '<a href=# id=''stipend_id_' + CONVERT(NVARCHAR(255), stpd.StipendID) + '''><i class=''iconic iconic-sm iconic-caret-right iconic-color-default'' style=''color: grey;''></i></a>', "
+            . "tdci.FirstName + ' ' + tdci.LastName, "
             . "stpd.Instructor, "
             . "stio.StipendOption, "
             . "CONVERT(VARCHAR(10), sptk.DateToHR, 101), "
