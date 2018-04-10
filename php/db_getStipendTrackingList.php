@@ -7,7 +7,7 @@
             . "CONVERT(VARCHAR(10), sptk.DateToHR, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateBA, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateToPayroll, 101) "
-            . "FROM [".$dbDatabase."].[dbo].[StipendTracking] AS sptk LEFT JOIN [".$dbDatabase."].[dbo].[Stipend] AS stpd ON sptk.StipendID = stpd.StipendID "
+            . "FROM [".$dbDatabase."].[dbo].[Stipend] AS stpd LEFT JOIN [".$dbDatabase."].[dbo].[StipendTracking] AS sptk ON stpd.StipendID = sptk.StipendID "
             . "LEFT JOIN [".$dbDatabase."].[dbo].[StipendOption] AS stio ON stpd.StipendOptionID = stio.StipendOptionID "
             . "LEFT JOIN [SKYBLAST.SOCCCD.EDU].[Tardis].[dbo].[InstructorInfo] AS tdci ON stpd.Instructor = tdci.UserID";
 
