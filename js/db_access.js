@@ -341,6 +341,20 @@ function db_updateStipendByID(StipendID, StipendOptionID, UserID, Instructor, Co
     return Result;
 }
 
+function db_updateSTSignedByFiscalByID(StipendTrackingID, SignedByFiscal) {
+    var Result = false;
+    $.ajax({
+        type:"POST",
+        url:"php/db_updateSTSignedByFiscalByID.php",
+        data:{StipendTrackingID:StipendTrackingID, SignedByFiscal:SignedByFiscal},
+        async: false,  
+        success:function(data) {
+            Result = JSON.parse(data);
+        }
+    });
+    return Result;
+}
+
 function db_updateSTDateToHRByID(StipendTrackingID, DateToHR) {
     var Result = false;
     $.ajax({

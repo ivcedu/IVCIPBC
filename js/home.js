@@ -136,6 +136,43 @@ $(document).ready(function() {
         return false;
     });
     
+    // signed by fiscal save button click //////////////////////////////////////
+    $('#btn_signed_by_fiscal_save').click(function() {
+        var stipend_id = stipendTrackingValidation();
+        if (stipend_id === 0) {
+            $('#signed_by_fiscal').datepicker('update', null);
+            return false;
+        }
+        var signed_by_fiscal = $('#signed_by_fiscal').find('input').val();
+        if (signed_by_fiscal === "") {
+            swal({title: "Error", text: "Please select Signed by Fiscal", type: "error"});
+            return false;
+        }
+        
+        var stipend_tracking_id = getStipendTracking(stipend_id);
+        if (stipend_tracking_id === "") {
+            var str_msg = "DB system error INSERT STIPEND_TRACKING - SIGNED BY TRACKING";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            if (!db_updateSTSignedByFiscalByID(stipend_tracking_id, signed_by_fiscal)) {
+                var str_msg = "DB system error UPDATE STIPEND_TRACKING - StipendTrackingID: " + stipend_tracking_id + ", SignedByFiscal:" + signed_by_fiscal;
+                return dbSystemErrorHandling(str_msg);
+            }
+        }
+        
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Signed by Fiscal: " + signed_by_fiscal) === "") {
+            var str_msg = "DB system error INSERT STIPEND_LOG";
+            return dbSystemErrorHandling(str_msg);
+        }
+        else {
+            swal({title: "Saved!", text: "Signed by Fiscal has been save successfuly", type: "success"});
+            getInstStipendLog(stipend_id);
+        }
+
+        return false;
+    });
+    
     // date to hr save button click ////////////////////////////////////////////
     $('#btn_date_to_hr_save').click(function() {
         var stipend_id = stipendTrackingValidation();
@@ -151,7 +188,7 @@ $(document).ready(function() {
         
         var stipend_tracking_id = getStipendTracking(stipend_id);
         if (stipend_tracking_id === "") {
-            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            var str_msg = "DB system error INSERT STIPEND_TRACKING - DATE TO HR";
             return dbSystemErrorHandling(str_msg);
         }
         else {
@@ -188,7 +225,7 @@ $(document).ready(function() {
         
         var stipend_tracking_id = getStipendTracking(stipend_id);
         if (stipend_tracking_id === "") {
-            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            var str_msg = "DB system error INSERT STIPEND_TRACKING - DATE BOARD APPROVE";
             return dbSystemErrorHandling(str_msg);
         }
         else {
@@ -225,7 +262,7 @@ $(document).ready(function() {
 
         var stipend_tracking_id = getStipendTracking(stipend_id);
         if (stipend_tracking_id === "") {
-            var str_msg = "DB system error INSERT STIPEND_TRACKING";
+            var str_msg = "DB system error INSERT STIPEND_TRACKING - DATE TO PAYROLL";
             return dbSystemErrorHandling(str_msg);
         }
         else {
@@ -417,6 +454,11 @@ function getStipendTrackingDates(stipend_id) {
             $('#btn_stipend_save').prop('disabled', true);
         }
         
+        if (result[0]['SignedByFiscal'] !== null) {
+            var arr_signed_fiscal = result[0]['SignedByFiscal'].split('-');
+            var signed_by_fiscal = new Date(arr_signed_fiscal[0], arr_signed_fiscal[1]-1, arr_signed_fiscal[2]);
+            $('#signed_by_fiscal').datepicker('update', signed_by_fiscal);
+        }
         if (result[0]['DateToHR'] !== null) {
             var arr_date_hr = result[0]['DateToHR'].split('-');
             var date_to_hr = new Date(arr_date_hr[0], arr_date_hr[1]-1, arr_date_hr[2]);

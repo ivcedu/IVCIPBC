@@ -5,6 +5,7 @@
             . "tdci.FirstName + ' ' + tdci.LastName, "
             . "stpd.Instructor, "
             . "stio.StipendOption, "
+            . "CONVERT(VARCHAR(10), sptk.SignedByFiscal, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateToHR, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateBA, 101), "
             . "CONVERT(VARCHAR(10), sptk.DateToPayroll, 101) "
