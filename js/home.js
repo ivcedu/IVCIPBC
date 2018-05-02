@@ -136,7 +136,7 @@ $(document).ready(function() {
         return false;
     });
     
-    // signed by fiscal save button click //////////////////////////////////////
+    // received by fiscal save button click //////////////////////////////////////
     $('#btn_signed_by_fiscal_save').click(function() {
         var stipend_id = stipendTrackingValidation();
         if (stipend_id === 0) {
@@ -145,7 +145,7 @@ $(document).ready(function() {
         }
         var signed_by_fiscal = $('#signed_by_fiscal').find('input').val();
         if (signed_by_fiscal === "") {
-            swal({title: "Error", text: "Please select Signed by Fiscal", type: "error"});
+            swal({title: "Error", text: "Please select Received by Fiscal", type: "error"});
             return false;
         }
         
@@ -161,12 +161,12 @@ $(document).ready(function() {
             }
         }
         
-        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Signed by Fiscal: " + signed_by_fiscal) === "") {
+        if (db_insertStipendLog(stipend_id, sessionStorage.getItem('ss_ipbc_login_id'), "Received by Fiscal: " + signed_by_fiscal) === "") {
             var str_msg = "DB system error INSERT STIPEND_LOG";
             return dbSystemErrorHandling(str_msg);
         }
         else {
-            swal({title: "Saved!", text: "Signed by Fiscal has been save successfuly", type: "success"});
+            swal({title: "Saved!", text: "Received by Fiscal has been save successfuly", type: "success"});
             getInstStipendLog(stipend_id);
         }
 
