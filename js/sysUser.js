@@ -80,19 +80,18 @@ $(document).ready(function() {
         var user_name = $.trim($('#mod_user_mame').val());
         var user_email = $.trim($('#mod_user_email').val());
         
+        if (!userValidation()) {
+            return false;
+        }
+        
         if (user_id === "") {
-            if (!userValidation()) {
-                return false;
+            if (db_insertUser(user_active, user_access_id, user_name, user_email) === "") {
+                $('#mod_user_setting').modal('hide');
+                var str_msg = "DB system error INSERT USER";
+                return dbSystemErrorHandling(str_msg);
             }
             else {
-                if (db_insertUser(user_active, user_access_id, user_name, user_email) === "") {
-                    $('#mod_user_setting').modal('hide');
-                    var str_msg = "DB system error INSERT USER";
-                    return dbSystemErrorHandling(str_msg);
-                }
-                else {
-                    db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New user has been added: " + user_name + " - " + user_email);
-                }
+                db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New user has been added: " + user_name + " - " + user_email);
             }
         }
         else {
