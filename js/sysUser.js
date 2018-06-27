@@ -90,9 +90,7 @@ $(document).ready(function() {
                 var str_msg = "DB system error INSERT USER";
                 return dbSystemErrorHandling(str_msg);
             }
-            else {
-                db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New user has been added: " + user_name + " - " + user_email);
-            }
+            db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New user has been added: " + user_name + " - " + user_email);
         }
         else {
             if (!db_updateUserByID(user_id, user_active, user_access_id, user_name, user_email)) {
@@ -100,9 +98,7 @@ $(document).ready(function() {
                 var str_msg = "DB system error UPDATE USER - UserID: " + user_id;
                 return dbSystemErrorHandling(str_msg);
             }
-            else {
-                db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "User has been updated AdminID: " + user_id + " - " + user_name + " - " + user_email);
-            }
+            db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "User has been updated AdminID: " + user_id + " - " + user_name + " - " + user_email);
         }
         
         getUserList();

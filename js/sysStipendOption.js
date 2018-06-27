@@ -75,20 +75,17 @@ $(document).ready(function() {
         var stipend_optioni_active = ($('#mod_stipend_option_active').is(':checked') ? true : false);
         var stipend_option = $.trim($('#mod_stipend_option').val());
         
+        if (!stipendOptionValidation()) {
+            return false;
+        }
+        
         if (stipend_option_id === "") {
-            if (!stipendOptionValidation()) {
-                return false;
+            if (db_insertStipendOption(stipend_optioni_active, stipend_option) === "") {
+                $('#mod_stipend_option_setting').modal('hide');
+                var str_msg = "DB system error INSERT STIPEND_OPTION";
+                return dbSystemErrorHandling(str_msg);
             }
-            else {
-                if (db_insertStipendOption(stipend_optioni_active, stipend_option) === "") {
-                    $('#mod_stipend_option_setting').modal('hide');
-                    var str_msg = "DB system error INSERT STIPEND_OPTION";
-                    return dbSystemErrorHandling(str_msg);
-                }
-                else {
-                    db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New stipend option been added: " + stipend_option);
-                }
-            }
+            db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "New stipend option been added: " + stipend_option);
         }
         else {
             if (!db_updateStipendOptionByID(stipend_option_id, stipend_optioni_active, stipend_option)) {
@@ -96,9 +93,7 @@ $(document).ready(function() {
                 var str_msg = "DB system error UPDATE STIPEND_OPTION - StpendOptionID: " + stipend_option_id;
                 return dbSystemErrorHandling(str_msg);
             }
-            else {
-                db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "Stipend option has been updated StipendOptionID: " + stipend_option_id + " - " + stipend_option);
-            }
+            db_insertSystemLog(sessionStorage.getItem('ss_ipbc_loginName'), "Stipend option has been updated StipendOptionID: " + stipend_option_id + " - " + stipend_option);
         }
         
         getStipendOptionList();
