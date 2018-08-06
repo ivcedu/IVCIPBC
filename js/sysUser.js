@@ -85,6 +85,9 @@ $(document).ready(function() {
         }
         
         if (user_id === "") {
+            if (!userDuplicateValidation()) {
+                return false;
+            }
             if (db_insertUser(user_active, user_access_id, user_name, user_email) === "") {
                 $('#mod_user_setting').modal('hide');
                 var str_msg = "DB system error INSERT USER";
@@ -148,13 +151,17 @@ function userValidation() {
         return false;
     }
 
+    return true;
+}
+
+function userDuplicateValidation() {
     var result = new Array();
     result = db_getUserByEmail($.trim($('#mod_user_email').val()));
     if (result.length === 1) {
         swal({title: "Error", text: "User email " + $('#mod_user_email').val() + " already exist", type: "error"});
         return false;
     }
-
+    
     return true;
 }
 
